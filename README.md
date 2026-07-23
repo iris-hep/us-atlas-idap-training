@@ -19,6 +19,6 @@
 
 * [Matthew Feickert](https://github.com/matthewfeickert), University of Wisconsin-Madison
 * [Fengping Hu](https://github.com/fengpinghu), University of Chicago
-* [Nick Manganelli](https://github.com/NJManganelli), University of Colorado, Boulder
+* [Nick Manganelli](https://github.com/NJManganelli), Northeastern University
 * [Roger Janusiak](https://github.com/RogerJanusiak), University of Washington
 * [Gordon Watts](https://github.com/gordonwatts), University of Washington
