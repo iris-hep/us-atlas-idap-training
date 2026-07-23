@@ -1,5 +1,4 @@
 [workspace]
-authors = ["Iason Krommydas <iason.krom@gmail.com>"]
 channels = ["conda-forge"]
 name = "columnar"
 platforms = ["win-64", "linux-64", "osx-64", "osx-arm64"]

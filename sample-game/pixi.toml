@@ -1,5 +1,4 @@
 [workspace]
-authors = ["Iason Krommydas <iason.krom@gmail.com>"]
 channels = ["conda-forge"]
 name = "sample-game"
 platforms = ["linux-64", "osx-64", "osx-arm64"]
