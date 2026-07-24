@@ -21,6 +21,9 @@
         },
         {
             "path": "sample-game"
+        },
+        {
+            "path": "stats-tools"
         }
     ]
 }
