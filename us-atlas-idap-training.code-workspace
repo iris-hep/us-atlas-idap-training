@@ -1,0 +1,26 @@
+{
+    "folders": [
+        {
+            "path": ".",
+            "name": "repository-root"
+        },
+        {
+            "path": "agc-physlite"
+        },
+        {
+            "path": "coffea"
+        },
+        {
+            "path": "columnar"
+        },
+        {
+            "path": "dask"
+        },
+        {
+            "path": "mplhep"
+        },
+        {
+            "path": "sample-game"
+        }
+    ]
+}
