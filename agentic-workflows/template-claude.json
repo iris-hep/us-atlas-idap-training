@@ -17,7 +17,7 @@
       "command": "npx",
       "args": [
         "mcp-remote",
-        "https://<YOUR_JUPYTERHUB_URL>/user/<your-email>/proxy/3001/mcp?token=<YOUR_JUPYTER_TOKEN>",
+        "https://jupyterhub.ssl-hep.org/user/<your-jupyterhub-account-email>/proxy/3001/mcp?token=<YOUR_JUPYTER_TOKEN>",
         "--transport",
         "http-only"
       ]
