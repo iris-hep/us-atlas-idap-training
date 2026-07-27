@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
+# NRP LLM token from https://nrp.ai/llmtoken/
 export ANTHROPIC_AUTH_TOKEN="YOUR_NRP_TOKEN_HERE"
+# JupyterHub API token from https://jupyterhub.ssl-hep.org/hub/token
+export JUPYTERHUB_API_TOKEN="YOUR_JUPYTERHUB_TOKEN_HERE"
+# <server-name> is the random segment in your running server's URL and changes
+# on every Binder launch, e.g.
+# https://jupyterhub.ssl-hep.org/user/<your-email>/<server-name>/lab
+export JUPYTER_MCP_URL="https://jupyterhub.ssl-hep.org/user/<your-email>/<server-name>/proxy/3001/mcp?token=${JUPYTERHUB_API_TOKEN}"
