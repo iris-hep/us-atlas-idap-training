@@ -1,0 +1,26 @@
+{
+  "env": {
+    "ANTHROPIC_BASE_URL": "https://ellm.nrp-nautilus.io/anthropic",
+    "ANTHROPIC_API_KEY": "$ANTHROPIC_AUTH_TOKEN",
+    "ANTHROPIC_DEFAULT_OPUS_MODEL": "qwen3",
+    "ANTHROPIC_DEFAULT_SONNET_MODEL": "qwen3",
+    "ANTHROPIC_DEFAULT_HAIKU_MODEL": "qwen3",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY": "1",
+    "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
+    "API_TIMEOUT_MS": "3000000",
+    "DISABLE_TELEMETRY": "1"
+  },
+  "theme": "dark",
+  "mcpServers": {
+    "jupyter": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://<YOUR_JUPYTERHUB_URL>/user/<your-email>/proxy/3001/mcp?token=<YOUR_JUPYTER_TOKEN>",
+        "--transport",
+        "http-only"
+      ]
+    }
+  }
+}
