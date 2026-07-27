@@ -1,0 +1,6 @@
+# secrets
+.env
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml
