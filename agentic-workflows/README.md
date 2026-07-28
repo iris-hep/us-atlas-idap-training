@@ -1,15 +1,5 @@
 # Agentic workflows with National Research Platform models and SSL JupyterHub
 
-https://binderhub.ssl-hep.org/
-
-https://binderhub.ssl-hep.org/v2/gh/matthewfeickert/nrp-jupyterhub-debug/HEAD
-
-https://code.claude.com/docs/en/env-vars
-
-https://github.com/fengpinghu/simple
-
-https://<YOUR_JUPYTERHUB_URL>/user/<your-email>/proxy/3001/mcp?token=<YOUR_JUPYTER_TOKEN>
-
 ## Prerequisites
 
 * Claude Code installed locally (the harness, not the paid plan)
@@ -57,19 +47,9 @@ Download and install Claude Code on your system following [the documentation](ht
 Using the Claude Code harness **does not require an Anthropic paid account**.
 
 To avoid having to manually set lots of things, we will use static Claude Code configuration files that will provide most information and then use user-specific configuration files for the rest.
-In this directory there is `.claude/settings.json` which provides the settings needed for NRP and `.claude/settings.local.template.json` that provides a template for creating a file that will hold your **secret** NRP API token.
-Create `.claude/settings.local.json` with
-
-```
-cp .claude/settings.local.template.json .claude/settings.local.json
-```
-
-and then edit `.claude/settings.local.json` to have `ANTHROPIC_AUTH_TOKEN` take the value of your NRP API key produced earlier.
-
-**Do NOT commit `.claude/settings.local.json` to version control.
-It contains secrets.**
-
-Similarly,
+In this directory there is `.claude/settings.json` which provides the settings needed for NRP.
+Your user-specific **secrets** go in a `.env` file.
+Create `.env` from the template with
 
 ```
 cp env-template .env
@@ -77,6 +57,7 @@ cp env-template .env
 
 and then edit `.env` to have
 
+* `ANTHROPIC_AUTH_TOKEN`
 * `JUPYTERHUB_API_TOKEN`
 * `USER_EMAIL`
 * `SERVER_NAME`
@@ -107,7 +88,7 @@ Guidance for working with the remote Jupyter server over MCP lives in [`CLAUDE.m
 
 | What | Where |
 |------|-------|
-| NRP token | https://nrp.ai/llmtoken/ → `.claude/settings.local.json` |
+| NRP token | https://nrp.ai/llmtoken/ → `.env` |
 | BinderHub | https://binderhub.ssl-hep.org/ |
 | JupyterHub token | https://jupyterhub.ssl-hep.org/hub/token |
 | LLM endpoint | `https://ellm.nrp-nautilus.io/anthropic` |

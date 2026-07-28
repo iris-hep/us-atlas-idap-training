@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
-# NRP LLM token: see .claude/settings.local.template.json (not set here)
+# NRP LLM token from https://nrp.ai/llmtoken/
+export ANTHROPIC_AUTH_TOKEN="YOUR_NRP_TOKEN_HERE"
 # JupyterHub API token from https://jupyterhub.ssl-hep.org/hub/token
 export JUPYTERHUB_API_TOKEN="YOUR_JUPYTERHUB_TOKEN_HERE"
 

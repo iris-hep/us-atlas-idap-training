@@ -6,7 +6,6 @@ version = "0.1.0"
 
 [tasks.create-config-files]
 cmd = """
-cp ./.claude/settings.local.template.json ./.claude/settings.local.json && \
 cp ./env-template .env && \
 echo 'set secrets and user configs in generated files'
 """
