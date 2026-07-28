@@ -100,3 +100,16 @@ You can now prompt your model to interact with your Binder instance.
 ### Example prompt
 
 > Read ./JUPYTER-MCP-GUIDE.md and then using MCP tools create a Jupyter notebook on the connected Jupyter Lab instance that gives examples of Awkward Array code.
+
+## Configuration overview
+
+| What | Where |
+|------|-------|
+| NRP token | https://nrp.ai/llmtoken/ → `.claude/settings.local.json` |
+| BinderHub | https://binderhub.ssl-hep.org/ |
+| JupyterHub token | https://jupyterhub.ssl-hep.org/hub/token |
+| LLM endpoint | `https://ellm.nrp-nautilus.io/anthropic` |
+| Model name | `qwen3` (for opus/sonnet/haiku slots) |
+| Static Claude Code config | `.claude/settings.json` (checked in) |
+| MCP config | `claude mcp add -s local` (stored per-project in `~/.claude.json`, native `http` transport) |
+| MCP port | `3001` (proxied through JupyterHub) |
