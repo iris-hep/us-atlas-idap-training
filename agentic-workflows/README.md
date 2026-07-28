@@ -1,15 +1,5 @@
 # Agentic workflows with National Research Platform models and SSL JupyterHub
 
-https://binderhub.ssl-hep.org/
-
-https://binderhub.ssl-hep.org/v2/gh/matthewfeickert/nrp-jupyterhub-debug/HEAD
-
-https://code.claude.com/docs/en/env-vars
-
-https://github.com/fengpinghu/simple
-
-https://<YOUR_JUPYTERHUB_URL>/user/<your-email>/proxy/3001/mcp?token=<YOUR_JUPYTER_TOKEN>
-
 ## Prerequisites
 
 * Claude Code installed locally (the harness, not the paid plan)
