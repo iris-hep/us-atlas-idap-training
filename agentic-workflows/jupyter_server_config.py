@@ -51,5 +51,5 @@ c.MCPExtensionApp.mcp_tools = [
     "jupyter_ai_tools.toolkits.file_system:grep",
     # Arbitrary shell execution on the (ephemeral) Binder pod.
     # Uncomment if wanted for the training demo.
-    # "jupyter_ai_tools.toolkits.code_execution:bash",
+    "jupyter_ai_tools.toolkits.code_execution:bash",
 ]
