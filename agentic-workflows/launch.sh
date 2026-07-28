@@ -1,28 +1,23 @@
 #!/usr/bin/env bash
 
+# Static Claude Code configuration (NRP endpoint, model mapping, telemetry
+# opt-outs, timeouts) lives in .claude/settings.json, and the NRP token in
+# .claude/settings.local.json — see README-claude-code-nrp.md. The only
+# per-launch step left is (re)registering the Jupyter MCP server, whose URL
+# changes on every Binder relaunch. Windows users: skip this script and run
+# the 'claude mcp add' command from the README manually, then run 'claude'.
+
 if [[ -f ".env" ]]; then
-    # Sets ANTHROPIC_AUTH_TOKEN, JUPYTERHUB_API_TOKEN, and JUPYTER_MCP_URL
+    # Sets JUPYTERHUB_API_TOKEN and JUPYTER_MCP_URL
     . .env
 else
     echo -e "\n# Error: .env file not found. Please create a .env file using the ./env-template as an example."
     exit 1
 fi
 
-export ANTHROPIC_BASE_URL="https://ellm.nrp-nautilus.io/anthropic"
-# Map all Claude Code model slots to the NRP-hosted model
-export ANTHROPIC_DEFAULT_OPUS_MODEL="qwen3"
-export ANTHROPIC_DEFAULT_SONNET_MODEL="qwen3"
-export ANTHROPIC_DEFAULT_HAIKU_MODEL="qwen3"
-# Avoid nonessential traffic to Anthropic services from a non-Anthropic endpoint
-export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC="1"
-export CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY="1"
-export CLAUDE_CODE_ENABLE_TELEMETRY="0"
-export DISABLE_TELEMETRY="1"
-# Allow long request timeouts for slower self-hosted models
-export API_TIMEOUT_MS="3000000"
-# Claude Code uses ANTHROPIC_AUTH_TOKEN when ANTHROPIC_API_KEY is absent.
-# Unsetting it ensures the NRP token is used correctly without triggering a
-# login prompt.
-unset ANTHROPIC_API_KEY
+# Re-register the Jupyter MCP server for the current Binder server.
+# 'claude mcp add' errors if the name is already registered, so remove first.
+claude mcp remove -s local jupyter > /dev/null 2>&1
+claude mcp add -s local -t http jupyter "${JUPYTER_MCP_URL}"
 
 claude

@@ -117,16 +117,16 @@ Use `mcp__jupyter__write` with complete notebook JSON content. This is more reli
 
 ## Environment Setup
 
-The `.env` file contains:
-- `JUPYTER_MCP_URL` - Full MCP endpoint with authentication token
-- `ANTHROPIC_AUTH_TOKEN` - API token for NRP-hosted models  
-- `ANTHROPIC_BASE_URL` - NRP API endpoint (`https://ellm.nrp-nautilus.io/anthropic`)
+Claude Code configuration is split across:
+- `.claude/settings.json` - NRP API endpoint (`https://ellm.nrp-nautilus.io/anthropic`), model mapping, telemetry opt-outs (checked in)
+- `.claude/settings.local.json` - `ANTHROPIC_AUTH_TOKEN` for NRP-hosted models (gitignored; copy from `.claude/settings.local.template.json`)
+- `.env` - `JUPYTER_MCP_URL`, the full MCP endpoint with authentication token (gitignored; copy from `env-template`)
 
-Source this file before running claude:
+Start Claude Code with:
 ```bash
-source .env
-claude
+bash launch.sh
 ```
+which registers the Jupyter MCP server from `JUPYTER_MCP_URL` via `claude mcp add` and runs `claude`. On Windows, run the `claude mcp add` command from README-claude-code-nrp.md manually, then run `claude`.
 
 ## Server Libraries
 
