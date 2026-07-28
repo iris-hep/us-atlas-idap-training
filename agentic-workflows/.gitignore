@@ -1,0 +1,9 @@
+# secrets
+.env
+
+# Claude settings
+.claude/settings.local.json
+
+# pixi environments
+.pixi/*
+!.pixi/config.toml

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+# NRP LLM token: see .claude/settings.local.template.json (not set here)
+# JupyterHub API token from https://jupyterhub.ssl-hep.org/hub/token
+export JUPYTERHUB_API_TOKEN="YOUR_JUPYTERHUB_TOKEN_HERE"
+
+export JUPYTERHUB_URL="https://jupyterhub.ssl-hep.org"
+export USER_EMAIL="email for the JupyterHub you are using"
+export SERVER_NAME="Name of the JupyterHub server you spawned (c.f. https://jupyterhub.ssl-hep.org/hub/home)"
+export JUPYTER_MCP_URL="${JUPYTERHUB_URL}/user/${USER_EMAIL}/${SERVER_NAME}/proxy/3001/mcp?token=${JUPYTERHUB_API_TOKEN}"
