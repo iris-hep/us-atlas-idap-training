@@ -97,7 +97,7 @@ Guidance for working with the remote Jupyter server over MCP lives in [`CLAUDE.m
 
 | What | Where |
 |------|-------|
-| NRP token | https://nrp.ai/llmtoken/ → `.claude/settings.local.json` |
+| NRP token | https://nrp.ai/llmtoken/ → `.env` |
 | BinderHub | https://binderhub.ssl-hep.org/ |
 | JupyterHub token | https://jupyterhub.ssl-hep.org/hub/token |
 | LLM endpoint | `https://ellm.nrp-nautilus.io/anthropic` |
