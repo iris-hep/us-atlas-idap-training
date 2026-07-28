@@ -1,7 +1,7 @@
 """Jupyter Server configuration exposing notebook tools over MCP.
 
 Registers tools from jupyter-ai-tools with the jupyter-server-mcp extension so
-that MCP clients (e.g. Claude Code, see README-claude-code-nrp.md) can create,
+that MCP clients (e.g. Claude Code, see README.md) can create,
 edit, and run notebooks on this server.
 
 To use in a BinderHub repo, add to requirements.txt:

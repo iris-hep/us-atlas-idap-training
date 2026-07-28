@@ -2,157 +2,120 @@
 
 ## ⚠️ CRITICAL: Remote JupyterHub Instance
 
-This project connects to a **remote JupyterHub server** hosted on NRP (National Research Platform). The Jupyter server is **NOT** running locally.
-
-## Connection Details
-
-- **JupyterHub URL**: `https://jupyterhub.ssl-hep.org`
-- **MCP Endpoint**: Defined in `$JUPYTER_MCP_URL` environment variable (includes auth token)
-- **Remote Home Directory**: `/home/jovyan/` (this is where notebooks are saved on the server)
-- **Kernel**: Python 3 (ipykernel) - Python 3.10.19
-
-## Key Rules for AI Assistants
-
-### 1. Use MCP Tools, Not Local File Operations
-
-When working with notebooks, **always use the `mcp__jupyter__*` tools**:
+This project connects to a **remote JupyterHub server** on the UChicago
+Scalable Systems Lab (SSL). The Jupyter server is **NOT** running locally.
+Local file tools (`Read`, `Write`, `Edit`, `Bash`) operate on a filesystem the
+Jupyter server cannot see. **Always use the `mcp__jupyter__*` tools for
+anything that should exist or run on the server.**
 
 | ✅ Correct | ❌ Wrong |
 |------------|----------|
 | `mcp__jupyter__write(file_path="/home/jovyan/notebook.ipynb", ...)` | `Write(file_path="./notebook.ipynb", ...)` |
 | `mcp__jupyter__read_notebook(file_path="example.ipynb")` | `Read(file_path="./example.ipynb")` |
-| `mcp__jupyter__add_cell(file_path="example.ipynb", ...)` | Writing to local .ipynb file |
+| `mcp__jupyter__bash(command="python -m pip list")` | `Bash("pip list")` (runs locally) |
 
-**Why**: Local file operations write to your filesystem, which is completely separate from the remote JupyterHub server. The MCP tools communicate directly with the remote server.
+## Connection Details
 
-### 2. File Paths Are Remote Server Paths
+- **JupyterHub URL**: `https://jupyterhub.ssl-hep.org`
+- **Remote home / Jupyter root**: `/home/jovyan/`
+- **Kernel**: Python 3 (`python3` via ipykernel) — verify with
+  `list_available_kernelspecs`
+- **MCP server**: registered with Claude Code as `jupyter` (HTTP transport,
+  served by the `jupyter-server-mcp` extension). Its tools appear with the
+  `mcp__jupyter__` prefix.
+- **Auth**: a Jupyter server token in the `?token=` query parameter of the MCP
+  URL, preconfigured by the user. There is **no OAuth** — never attempt an
+  OAuth flow and never `curl` the endpoint directly; the MCP tools
+  authenticate internally. If the tools fail to connect at all, that is
+  user-side setup — see [README.md](README.md).
 
-All file paths in MCP tool calls refer to paths **on the JupyterHub server**:
+## Path Conventions
 
-```python
-# Correct - absolute path on remote server
-mcp__jupyter__write(file_path="/home/jovyan/my-notebook.ipynb", content=...)
+All paths refer to the **remote server's** filesystem:
 
-# Correct - relative path from server working directory
-mcp__jupyter__write(file_path="my-notebook.ipynb", content=...)
+- Filesystem tools (`write`, `read`, `ls`) take **absolute** paths:
+  `/home/jovyan/example.ipynb`
+- Notebook and cell tools (`read_notebook`, `add_cell`, `edit_cell`, …) and
+  `open_file` take paths **relative to the Jupyter root**: `example.ipynb`
+- `glob` and `grep` default to the Jupyter root when `path` is omitted
 
-# Wrong - this writes to local filesystem, invisible to Jupyter server
-Write(file_path="/home/feickert/Code/.../my-notebook.ipynb", content=...)
-```
+## Cell Addressing
 
-### 3. Authentication Is Handled Automatically
+Every `cell_id` parameter accepts **either** a cell UUID **or a numeric index
+passed as a string** — `cell_id="0"` targets the first cell. Use
+`get_cell_id_from_index` when you need the stable UUID.
 
-The `$JUPYTER_MCP_URL` environment variable contains the OAuth2 authentication token. The MCP tools use this automatically.
+## Execution Semantics — read before running anything
 
-```bash
-# DO NOT do this - you'll get OAuth2 redirect issues
-curl $JUPYTER_MCP_URL/api/contents/
+1. **The run tools return no outputs.** After `run_all_cells` or `run_cell`,
+   read results back with `read_notebook(file_path=..., include_outputs=True)`
+   or `read_cell` (outputs included by default). An output-free notebook after
+   a run usually means `include_outputs` was left at its `False` default in
+   `read_notebook` — not that execution failed. (The run tools' own
+   descriptions mention a `read_notebook_cells` tool; it does not exist — use
+   `read_notebook`/`read_cell`.)
+2. **The execution wait is capped at 10 seconds** (`timeout` default and
+   maximum). **A timeout does NOT mean the cell failed — the kernel keeps
+   running.** For long-running cells (remote file reads, fits): run, tolerate
+   the timeout, then poll with `read_cell`/`read_notebook` until outputs
+   appear.
+3. **`create_notebook` starts with one empty code cell.** Edit cell `"0"`
+   instead of adding a new first cell, or skip `create_notebook` and `write`
+   complete notebook JSON directly (most reliable for new notebooks).
 
-# DO this - MCP tools handle auth internally
-mcp__jupyter__read_notebook(file_path="...")
-```
+## Expected MCP Tools
 
-## Available MCP Tools
+The `jupyter` MCP server is expected to expose all of the tools below. If no
+`mcp__jupyter__*` tools are available in the session, the MCP connection is
+not set up — stop and ask the user to check `/mcp` (setup is described in
+[README.md](README.md)); do **not** fall back to local file tools.
 
-| Tool | Description |
-|------|-------------|
-| `mcp__jupyter__list_available_kernelspecs` | List available Python kernels on server |
-| `mcp__jupyter__create_notebook` | Create new notebook on remote server |
-| `mcp__jupyter__read_notebook` | Read notebook contents as markdown |
-| `mcp__jupyter__write` | Write complete notebook JSON to server |
-| `mcp__jupyter__add_cell` | Add cell to existing notebook |
-| `mcp__jupyter__edit_cell` | Edit cell content/type on existing notebook |
-| `mcp__jupyter__run_all_cells` | Execute all cells in notebook |
-| `mcp__jupyter__open_file` | Open file in JupyterLab UI |
+| Group | Tool | Notes |
+|-------|------|-------|
+| Notebook | `create_notebook` | New notebook; starts with one empty cell (see above) |
+| | `write` | Write complete notebook JSON (or any file); absolute path |
+| | `read_notebook` | Whole notebook as markdown; `include_outputs` defaults to **False** |
+| | `open_file` | Open a file in the JupyterLab UI for the user |
+| Cells | `add_cell` | Add a cell above/below a cell, or at the end |
+| | `insert_cell` | Insert a cell at a specific index |
+| | `edit_cell` | Replace a cell's content and/or type |
+| | `delete_cell` | Remove a cell |
+| | `read_cell` | One cell as markdown; `include_outputs` defaults to **True** |
+| | `get_cell_id_from_index` | Map cell index → UUID |
+| Execution | `run_all_cells` | Run the whole notebook; returns no outputs |
+| | `run_cell` | Run one cell by `cell_id`; returns no outputs |
+| Filesystem | `ls`, `glob`, `grep`, `read` | Explore and read the remote filesystem |
+| Shell | `bash` | Run a shell command on the remote server |
+| JupyterLab | `list_available_kernelspecs` | List available kernels |
+| | `list_all_commands`, `execute_command` | Discover and run JupyterLab frontend commands |
 
-## Typical Workflow
+## Which Tool for Which Task
 
-### Creating a New Notebook with Content
-
-```
-Step 1: Create notebook (optional - can also just write directly)
-  → mcp__jupyter__create_notebook(file_path="example.ipynb", kernel_name="python3")
-
-Step 2: Write content OR add/edit cells
-  → mcp__jupyter__write(file_path="example.ipynb", content="{...notebook JSON...}")
-  OR
-  → mcp__jupyter__add_cell(file_path="example.ipynb", cell_type="code", content="...")
-
-Step 3: Execute (optional)
-  → mcp__jupyter__run_all_cells(file_path="example.ipynb")
-
-Step 4: Read results
-  → mcp__jupyter__read_notebook(file_path="example.ipynb")
-```
-
-### Recommended Approach for New Notebooks
-
-Use `mcp__jupyter__write` with complete notebook JSON content. This is more reliable than creating an empty notebook and adding cells one at a time.
+| Task | Tools |
+|------|-------|
+| Create a notebook with content | `write` complete notebook JSON to `/home/jovyan/<name>.ipynb`; or `create_notebook` + `edit_cell(cell_id="0", ...)` + `add_cell` |
+| Run everything and inspect results | `run_all_cells` → `read_notebook(include_outputs=True)` |
+| Fix and re-run one cell | `edit_cell` → `run_cell(cell_id=...)` → `read_cell` |
+| Locate a notebook or data file | `ls(path="/home/jovyan")` or `glob(pattern="**/*.ipynb")` |
+| Search file contents on the server | `grep(pattern=..., include="*.ipynb")` |
+| Check installed packages/versions | `bash(command="python -m pip list")` |
+| Restart the kernel | `list_all_commands(query="restart")` → `execute_command(command_id=...)` |
+| Show the user a file in JupyterLab | `open_file(file_path="example.ipynb")` |
 
 ## Troubleshooting
 
-### "file_id_manager" Error
-
-**Cause**: The notebook file doesn't exist on the server yet, or MCP lost connection.
-
-**Solution**: Use `mcp__jupyter__write` to create the notebook first, then use cell-editing tools if needed.
-
-### 404 Errors on read_notebook
-
-**Cause**: The file path is incorrect or the notebook doesn't exist on the server.
-
-**Solution**: Verify the path. Use `/home/jovyan/` prefix or a simple relative filename.
-
-### OAuth2 Redirect When Using curl
-
-**Cause**: Trying to access the Jupyter API directly without proper authentication headers.
-
-**Solution**: Don't use curl. The MCP tools handle authentication internally via the token in `$JUPYTER_MCP_URL`.
-
-### Notebook JSON Parse Errors
-
-**Cause**: Malformed notebook JSON (often from escaped quotes or invalid characters in source strings).
-
-**Solution**: Use Python to generate valid JSON, or carefully escape special characters in notebook source strings.
-
-## Environment Setup
-
-Claude Code configuration is split across:
-- `.claude/settings.json` - NRP API endpoint (`https://ellm.nrp-nautilus.io/anthropic`), model mapping, telemetry opt-outs (checked in)
-- `.claude/settings.local.json` - `ANTHROPIC_AUTH_TOKEN` for NRP-hosted models (gitignored; copy from `.claude/settings.local.template.json`)
-- `.env` - `JUPYTER_MCP_URL`, the full MCP endpoint with authentication token (gitignored; copy from `env-template`)
-
-Start Claude Code with:
-```bash
-bash launch.sh
-```
-which registers the Jupyter MCP server from `JUPYTER_MCP_URL` via `claude mcp add` and runs `claude`. On Windows, run the `claude mcp add` command from README-claude-code-nrp.md manually, then run `claude`.
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `file_id_manager` error | Notebook doesn't exist on the server yet, or MCP connection dropped | Create it with `write` first, then use cell tools |
+| `404` from notebook tools | Wrong remote path | Locate the file with `ls`/`glob`; notebook paths are relative to `/home/jovyan/` |
+| Run "succeeds" but notebook shows no outputs | `read_notebook` defaults to `include_outputs=False` | Re-read with `include_outputs=True` |
+| Timeout from `run_cell`/`run_all_cells` | Cell takes longer than the 10 s cap | Not a failure — the kernel continues; poll outputs until they appear |
+| OAuth2 redirect / login HTML | Direct HTTP access (e.g. `curl`) to the server | Never curl; the MCP tools handle the token internally |
+| Notebook JSON parse error on `write` | Malformed notebook JSON (escaping, invalid characters) | Generate the JSON programmatically and validate before writing |
 
 ## Server Libraries
 
-The remote JupyterHub instance has the Scikit-HEP stack installed:
-- `awkward` - Jagged array operations
-- `numpy` - Numerical computing
-- `uproot` - ROOT file I/O
-- `hist` - Histogramming
-
-## Quick Reference Card
-
-```
-┌─────────────────────────────────────────────────────────────────┐
-│  JUPYTER MCP - QUICK REFERENCE                                  │
-├─────────────────────────────────────────────────────────────────┤
-│  Remote Server: jupyterhub.ssl-hep.org                          │
-│  Remote Home:   /home/jovyan/                                   │
-│  Auth:          Via $JUPYTER_MCP_URL (automatic)                │
-├─────────────────────────────────────────────────────────────────┤
-│  DO:   mcp__jupyter__write(file_path="/home/jovyan/x.ipynb")    │
-│  DON'T: Write() to local filesystem paths                       │
-├─────────────────────────────────────────────────────────────────┤
-│  DO:   Use MCP tools for all notebook operations                │
-│  DON'T: Use curl or direct API calls                            │
-├─────────────────────────────────────────────────────────────────┤
-│  ERROR: "file_id_manager" → Create notebook with write() first  │
-│  ERROR: 404 → Check file path is on remote server               │
-└─────────────────────────────────────────────────────────────────┘
-```
+The remote server has the Scikit-HEP stack installed (`awkward`, `numpy`,
+`uproot`, `hist`, …). The exact set can change between Binder launches —
+verify with `bash(command="python -m pip list")` before assuming a package
+exists.
