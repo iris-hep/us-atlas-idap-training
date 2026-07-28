@@ -33,7 +33,7 @@ All file paths in MCP tool calls refer to paths **on the JupyterHub server**:
 # Correct - absolute path on remote server
 mcp__jupyter__write(file_path="/home/jovyan/my-notebook.ipynb", content=...)
 
-# Correct - relative path from server working directory  
+# Correct - relative path from server working directory
 mcp__jupyter__write(file_path="my-notebook.ipynb", content=...)
 
 # Wrong - this writes to local filesystem, invisible to Jupyter server
@@ -134,9 +134,7 @@ The remote JupyterHub instance has the Scikit-HEP stack installed:
 - `awkward` - Jagged array operations
 - `numpy` - Numerical computing
 - `uproot` - ROOT file I/O
-- `vector` - Lorentz vectors
 - `hist` - Histogramming
-- `pyhf` - HistFactory in Python
 
 ## Quick Reference Card
 
