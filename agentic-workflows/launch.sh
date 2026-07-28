@@ -21,4 +21,9 @@ fi
 claude mcp remove -s local jupyter > /dev/null 2>&1
 claude mcp add -s local -t http jupyter "${JUPYTER_MCP_URL}"
 
+# Claude Code uses ANTHROPIC_AUTH_TOKEN when ANTHROPIC_API_KEY is absent.
+# Unsetting it ensures the NRP token is used correctly without triggering a
+# login prompt.
+unset ANTHROPIC_API_KEY
+
 claude
