@@ -11,11 +11,53 @@ cmd = "jupyter lab"
 [tasks.start]
 depends-on = ["lab"]
 
+# Shared dependencies live in the implicit `default` feature and deliberately do
+# NOT include coffea itself. That lets the `default` environment pull coffea from
+# conda-forge (the `stable` feature) while the `preview` environments pull it from
+# git, without ever installing two coffea builds into the same environment.
 [dependencies]
-coffea = ">=2025.7.1,<2026"
-dask = ">=2025.3.0,<2026"
-distributed = ">=2025.3.0,<2026"
-xrootd = ">=5.8.1,<6"
-jupyterlab = ">=4.4.5,<5"
-notebook = ">=7.4.4,<8"
-ipywidgets = ">=8.1.7,<9"
+awkward = ">=2.11.0,<3"
+uproot = ">=5.7.5,<6"
+vector = ">=1.8.1,<2"
+hist = ">=2.10.1,<3"
+mplhep = ">=1.3.1,<2"
+matplotlib = ">=3.11.1,<4"
+# numpy is capped below 2.5 because numba 0.66 (used in the advanced notebook)
+# does not yet support numpy 2.5.
+numpy = ">=2.4,<2.5"
+numba = ">=0.66.0,<0.67"
+pydantic = ">=2.13,<3"
+xrootd = ">=6.1.0,<7"
+fsspec-xrootd = ">=0.5.5,<0.6"
+jupyterlab = ">=4.6.2,<5"
+notebook = ">=7.6.1,<8"
+ipywidgets = ">=8.1.8,<9"
+
+# Released coffea (2026.7): virtual-array backend, no dask required for the
+# virtual-array path. dask/distributed are included here (default environment
+# only) for the DaskExecutor cluster-scaleout example in coffea-04-scaleout.ipynb.
+# DaskExecutor distributes *chunks* to workers and processes each eagerly on
+# virtual arrays -- it does not build a dask-awkward DAG. They are deliberately
+# kept out of the shared feature so the git-based preview environments, whose
+# coffea pins an older dask via dask-awkward, still resolve.
+[feature.stable.dependencies]
+coffea = ">=2026.7.0,<2027"
+dask = ">=2026.7.0,<2027"
+distributed = ">=2026.7.0,<2027"
+
+# PREVIEW: upcoming pydantic dataset-tools extensions (draft PRs #1579 + #1600 +
+# #1601, stacked on the `feat/mutable-steps-prototype` branch). Installed from git
+# because these are unreleased. Enables the guarded "preview" cells for
+# non-dask preprocess backends, user metadata extraction, and resizable steps.
+[feature.preview.pypi-dependencies]
+coffea = { git = "https://github.com/NJManganelli/coffea.git", branch = "feat/mutable-steps-prototype" }
+
+# PREVIEW: the coffea.compute execution refactor (draft PR #1470). Installed from
+# git; enables the guarded "future unified execution protocol" cells.
+[feature.preview-compute.pypi-dependencies]
+coffea = { git = "https://github.com/scikit-hep/coffea.git", branch = "compute" }
+
+[environments]
+default = ["stable"]
+preview = ["preview"]
+preview-compute = ["preview-compute"]
