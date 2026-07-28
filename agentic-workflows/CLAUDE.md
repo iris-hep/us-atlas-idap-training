@@ -1,12 +1,12 @@
-# Jupyter MCP Server - Usage Guide for AI Assistants
+# Agentic workflows — Jupyter MCP usage guide
 
 ## ⚠️ CRITICAL: Remote JupyterHub Instance
 
-This project connects to a **remote JupyterHub server** on the UChicago
-Scalable Systems Lab (SSL). The Jupyter server is **NOT** running locally.
-Local file tools (`Read`, `Write`, `Edit`, `Bash`) operate on a filesystem the
-Jupyter server cannot see. **Always use the `mcp__jupyter__*` tools for
-anything that should exist or run on the server.**
+This project connects Claude Code to a **remote JupyterHub server** on the
+UChicago Scalable Systems Lab (SSL). The Jupyter server is **NOT** running
+locally. Local file tools (`Read`, `Write`, `Edit`, `Bash`) operate on a
+filesystem the Jupyter server cannot see. **Always use the `mcp__jupyter__*`
+tools for anything that should exist or run on the server.**
 
 | ✅ Correct | ❌ Wrong |
 |------------|----------|

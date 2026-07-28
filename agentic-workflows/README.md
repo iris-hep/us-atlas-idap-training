@@ -99,7 +99,9 @@ You can now prompt your model to interact with your Binder instance.
 
 ### Example prompt
 
-> Read ./JUPYTER-MCP-GUIDE.md and then using MCP tools create a Jupyter notebook on the connected Jupyter Lab instance that gives examples of Awkward Array code.
+> Using MCP tools create a Jupyter notebook on the connected Jupyter Lab instance that gives examples of Awkward Array code.
+
+Guidance for working with the remote Jupyter server over MCP lives in [`CLAUDE.md`](CLAUDE.md), which Claude Code loads automatically when launched from this directory.
 
 ## Configuration overview
 
