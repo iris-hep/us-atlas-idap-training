@@ -75,7 +75,7 @@ From this directory, run
 bash launch.sh
 ```
 
-Your Claude Code instance will now have access to the `qwen3` model on NRP and your SSL BinderHub instance.
+Your Claude Code instance will now have access to the `kimi` model on NRP and your SSL BinderHub instance.
 You can now prompt your model to interact with your Binder instance.
 
 ### Example prompt
@@ -92,7 +92,7 @@ Guidance for working with the remote Jupyter server over MCP lives in [`CLAUDE.m
 | BinderHub | https://binderhub.ssl-hep.org/ |
 | JupyterHub token | https://jupyterhub.ssl-hep.org/hub/token |
 | LLM endpoint | `https://ellm.nrp-nautilus.io/anthropic` |
-| Model name | `qwen3` (for opus/sonnet/haiku slots) |
+| Model name | `kimi` (for opus/sonnet/haiku slots) |
 | Static Claude Code config | `.claude/settings.json` (checked in) |
 | MCP config | `claude mcp add -s local` (stored per-project in `~/.claude.json`, native `http` transport) |
 | MCP port | `3001` (proxied through JupyterHub) |
