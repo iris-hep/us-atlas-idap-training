@@ -47,19 +47,9 @@ Download and install Claude Code on your system following [the documentation](ht
 Using the Claude Code harness **does not require an Anthropic paid account**.
 
 To avoid having to manually set lots of things, we will use static Claude Code configuration files that will provide most information and then use user-specific configuration files for the rest.
-In this directory there is `.claude/settings.json` which provides the settings needed for NRP and `.claude/settings.local.template.json` that provides a template for creating a file that will hold your **secret** NRP API token.
-Create `.claude/settings.local.json` with
-
-```
-cp .claude/settings.local.template.json .claude/settings.local.json
-```
-
-and then edit `.claude/settings.local.json` to have `ANTHROPIC_AUTH_TOKEN` take the value of your NRP API key produced earlier.
-
-**Do NOT commit `.claude/settings.local.json` to version control.
-It contains secrets.**
-
-Similarly,
+In this directory there is `.claude/settings.json` which provides the settings needed for NRP.
+Your user-specific **secrets** go in a `.env` file.
+Create `.env` from the template with
 
 ```
 cp env-template .env
@@ -67,6 +57,7 @@ cp env-template .env
 
 and then edit `.env` to have
 
+* `ANTHROPIC_AUTH_TOKEN`
 * `JUPYTERHUB_API_TOKEN`
 * `USER_EMAIL`
 * `SERVER_NAME`
