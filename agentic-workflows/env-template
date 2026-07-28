@@ -4,7 +4,8 @@
 export ANTHROPIC_AUTH_TOKEN="YOUR_NRP_TOKEN_HERE"
 # JupyterHub API token from https://jupyterhub.ssl-hep.org/hub/token
 export JUPYTERHUB_API_TOKEN="YOUR_JUPYTERHUB_TOKEN_HERE"
-# <server-name> is the random segment in your running server's URL and changes
-# on every Binder launch, e.g.
-# https://jupyterhub.ssl-hep.org/user/<your-email>/<server-name>/lab
-export JUPYTER_MCP_URL="https://jupyterhub.ssl-hep.org/user/<your-email>/<server-name>/proxy/3001/mcp?token=${JUPYTERHUB_API_TOKEN}"
+
+export JUPYTERHUB_URL="https://jupyterhub.ssl-hep.org"
+export USER_EMAIL="email for the JupyterHub you are using"
+export SERVER_NAME="Name of the JupyterHub server you spawned (c.f. https://jupyterhub.ssl-hep.org/hub/home)"
+export JUPYTER_MCP_URL="${JUPYTERHUB_URL}/user/${USER_EMAIL}/${SERVER_NAME}/proxy/3001/mcp?token=${JUPYTERHUB_API_TOKEN}"
