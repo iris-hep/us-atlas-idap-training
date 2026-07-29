@@ -10,11 +10,11 @@
 #   claude mcp add -s local -t http jupyter "https://jupyterhub.ssl-hep.org/user/<email>/<server-name>/proxy/3001/mcp?token=<token>"
 # then run 'claude'.
 
-if [[ -f ".env" ]]; then
+if [[ -f ".secrets/.env" ]]; then
     # Sets ANTHROPIC_AUTH_TOKEN, JUPYTERHUB_API_TOKEN, and JUPYTER_MCP_URL
-    . .env
+    . .secrets/.env
 else
-    echo -e "\n# Error: .env file not found. Please create a .env file using the ./env-template as an example."
+    echo -e "\n# Error: .secrets/.env file not found. Please create a .env file using the ./env-template as an example."
     exit 1
 fi
 

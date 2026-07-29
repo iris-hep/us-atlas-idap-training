@@ -48,23 +48,24 @@ Using the Claude Code harness **does not require an Anthropic paid account**.
 
 To avoid having to manually set lots of things, we will use static Claude Code configuration files that will provide most information and then use user-specific configuration files for the rest.
 In this directory there is `.claude/settings.json` which provides the settings needed for NRP.
-Your user-specific **secrets** go in a `.env` file.
-Create `.env` from the template with
+Your user-specific **secrets** go in a `.env` file under the `.secrets/` directory.
+Create `.secrets/.env` from the template with
 
 ```
-cp env-template .env
+cp env-template .secrets/.env
 ```
 
-and then edit `.env` to have
+and then edit `.secrets/.env` to have
 
 * `ANTHROPIC_AUTH_TOKEN`
 * `JUPYTERHUB_API_TOKEN`
 * `USER_EMAIL`
 * `SERVER_NAME`
+   - Note that this will need to be updated for **every** new server launched
 
 set to your particular information.
 
-**Do NOT commit `.env` to version control.
+**Do NOT commit `.secrets/.env` to version control.
 It contains secrets.**
 
 ## Run
@@ -88,7 +89,7 @@ Guidance for working with the remote Jupyter server over MCP lives in [`CLAUDE.m
 
 | What | Where |
 |------|-------|
-| NRP token | https://nrp.ai/llmtoken/ → `.env` |
+| NRP token | https://nrp.ai/llmtoken/ → `.secrets/.env` |
 | BinderHub | https://binderhub.ssl-hep.org/ |
 | JupyterHub token | https://jupyterhub.ssl-hep.org/hub/token |
 | LLM endpoint | `https://ellm.nrp-nautilus.io/anthropic` |

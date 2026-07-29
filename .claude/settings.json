@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "deny": [
+      "Read(agentic-workflows/.secrets/**)",
+      "Edit(agentic-workflows/.secrets/**)"
+    ]
+  }
+}
