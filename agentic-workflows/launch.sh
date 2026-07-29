@@ -20,7 +20,7 @@ fi
 
 # Re-register the Jupyter MCP server for the current Binder server.
 # 'claude mcp add' errors if the name is already registered, so remove first.
-claude mcp remove -s local jupyter > /dev/null 2>&1
+claude mcp remove jupyter > /dev/null 2>&1
 claude mcp add -s local -t http jupyter "${JUPYTER_MCP_URL}"
 
 # Claude Code uses ANTHROPIC_AUTH_TOKEN when ANTHROPIC_API_KEY is absent.
