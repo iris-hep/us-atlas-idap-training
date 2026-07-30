@@ -9,11 +9,5 @@
     "CLAUDE_CODE_ENABLE_TELEMETRY": "0",
     "DISABLE_TELEMETRY": "1",
     "API_TIMEOUT_MS": "3000000"
-  },
-  "permissions": {
-    "deny": [
-      "Read(.secrets/**)",
-      "Edit(.secrets/**)"
-    ]
   }
 }
