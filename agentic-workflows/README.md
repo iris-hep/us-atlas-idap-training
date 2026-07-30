@@ -38,7 +38,7 @@
 1. You will be prompted to select an authentication system.
    Select **CILogon** and select your institution.
 1. After login you will be taken to the BinderHub dashboard.
-   You can provide any public repository of your own, but for the purposes of this event enter `matthewfeickert/nrp-jupyterhub-debug` into the "GitHub repository name or URL" field and click the "launch" button.
+   You can provide any public repository of your own, but for the purposes of this event enter https://github.com/matthewfeickert/nrp-jupyterhub-debug into the "GitHub repository name or URL" field and click the "launch" button.
 1. After the Binder instance launches, visit your [Hub control panel](https://jupyterhub.ssl-hep.org/hub/home) and copy the **server name** for your Binder instance.
 
 ## Configure Claude Code harness
@@ -48,14 +48,15 @@ Using the Claude Code harness **does not require an Anthropic paid account**.
 
 To avoid having to manually set lots of things, we will use static Claude Code configuration files that will provide most information and then use user-specific configuration files for the rest.
 In this directory there is `.claude/settings.json` which provides the settings needed for NRP.
-Your user-specific **secrets** go in a `.env` file under the `.secrets/` directory.
-Create `.secrets/.env` from the template with
+Your user-specific **secrets** go in a `.env` file under the `$HOME/.secrets/` directory.
+Create `$HOME/.secrets/.env` from the template with
 
 ```
-cp env-template .secrets/.env
+mkdir -p "${HOME}"/.secrets
+cp env-template "${HOME}"/.secrets/.env
 ```
 
-and then edit `.secrets/.env` to have
+and then edit `$HOME/.secrets/.env` to have
 
 * `ANTHROPIC_AUTH_TOKEN`
 * `JUPYTERHUB_API_TOKEN`
@@ -65,8 +66,12 @@ and then edit `.secrets/.env` to have
 
 set to your particular information.
 
-**Do NOT commit `.secrets/.env` to version control.
+**Do NOT commit `$HOME/.secrets/.env` to version control.
 It contains secrets.**
+
+> [!IMPORTANT]
+> The security measures we're taking to not leak API keys by placing the `.env` file with secrets in a directory other than where an agentic harness is launched is a good first step, but it is not fully robust and an agent can still read the file and potentially leak secrets if it gains read access to the directory.
+> The only way to guard against this is a kernel-level solution, which is more complicated that it is worth today.
 
 ## Run
 
@@ -89,7 +94,7 @@ Guidance for working with the remote Jupyter server over MCP lives in [`CLAUDE.m
 
 | What | Where |
 |------|-------|
-| NRP token | https://nrp.ai/llmtoken/ → `.secrets/.env` |
+| NRP token | https://nrp.ai/llmtoken/ → `$HOME/.secrets/.env` |
 | BinderHub | https://binderhub.ssl-hep.org/ |
 | JupyterHub token | https://jupyterhub.ssl-hep.org/hub/token |
 | LLM endpoint | `https://ellm.nrp-nautilus.io/anthropic` |
