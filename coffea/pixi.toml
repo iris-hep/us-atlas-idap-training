@@ -60,12 +60,13 @@ textual = ">=1"
 [feature.preview.pypi-dependencies]
 coffea = { git = "https://github.com/NJManganelli/coffea.git", branch = "feat/mutable-steps-prototype" }
 
-# PREVIEW: the coffea.compute execution refactor (draft PR #1470). Installed from
-# git; enables the guarded "future unified execution protocol" cells.
-[feature.preview-compute.pypi-dependencies]
+# EXPERIMENTAL: the coffea.compute execution refactor (draft PR #1470). Installed
+# from git; enables the guarded cells in coffea-06-experimental.ipynb. Named
+# "experimental" (vs. "preview") because it is a larger, more speculative change.
+[feature.experimental.pypi-dependencies]
 coffea = { git = "https://github.com/scikit-hep/coffea.git", branch = "compute" }
 
 [environments]
 default = ["stable"]
 preview = ["preview"]
-preview-compute = ["preview-compute"]
+experimental = ["experimental"]
