@@ -126,11 +126,13 @@ upgrade:
 
 ## 6. Latent issues to fix while migrating
 
-- **Operator-precedence bug (cell `91e147a5`)**: `events.Electrons.pt > 30000 & (...)`
-  parses as `events.Electrons.pt > (30000 & (...))` because `&` binds tighter
-  than `>`. It "works" today only by accident of integer bitwise semantics and
-  may behave differently under the virtual/typetracer backend. Wrap the
-  comparisons in parentheses: `(pt > 30000) & (...)`.
+- **Operator-precedence bug (cell `91e147a5`, on both the electron *and* muon
+  lines)**: `events.Electrons.pt > 30000 & (...)` parses as
+  `events.Electrons.pt > (30000 & (...))` because `&` binds tighter than `>`.
+  Since `30000 & 1 == 0`, the whole expression collapses to `pt > 0` — this does
+  **not** "work by accident"; it silently voids *both* the 30 GeV pT cut and the
+  |eta| cut on that object. Wrap each comparison in parentheses:
+  `(pt > 30000) & (abs(eta) < ...)`.
 - **mplhep 0.4 → 1.x** is a major version jump; re-check any `mplhep.style` /
   `histplot` calls used in the plotting cells.
 
@@ -139,8 +141,8 @@ upgrade:
 1. Bump `pixi.toml`: coffea `>=2026.7`, awkward/uproot/hist/mplhep/xrootd to the
    versions in §2. Leave pyhf `<0.8` and cabinetry `<0.7` (already newest).
    Keep dask/distributed **only** if you intend to keep a cluster option;
-   otherwise drop them. Note numpy will resolve to 2.4.x on Python 3.14 (the
-   coffea/correctionlib conda stack currently caps it below 2.5) — do not pin
+   otherwise drop them. Note numpy will resolve to 2.4.x on Python 3.14 (numba
+   0.66, pulled in transitively by coffea, requires numpy <2.5) — do not pin
    `numpy>=2.5`.
 2. Remove the dask `Client` (`2e1eb49c`) and `performance_report` (`9cd1bee4`);
    swap `DaskExecutor` → `FuturesExecutor` (`1a82bcae`); add `mode="virtual"` to
