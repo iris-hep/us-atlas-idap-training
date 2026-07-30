@@ -11,6 +11,10 @@ cmd = "jupyter lab"
 [tasks.start]
 depends-on = ["lab"]
 
+[tasks.tui]
+description = "Launch the rich/Textual PHYSLITE demo (append --rich, --local, --workers N, --files N)"
+cmd = "python physlite_tui.py"
+
 # Shared dependencies live in the implicit `default` feature and deliberately do
 # NOT include coffea itself. That lets the `default` environment pull coffea from
 # conda-forge (the `stable` feature) while the `preview` environments pull it from
@@ -44,6 +48,10 @@ ipywidgets = ">=8.1.8,<9"
 coffea = ">=2026.7.0,<2027"
 dask = ">=2026.7.0,<2027"
 distributed = ">=2026.7.0,<2027"
+# rich + textual power the terminal demo, physlite_tui.py (launch from a
+# JupyterLab terminal). rich ships with coffea already; textual is added here.
+rich = ">=14,<15"
+textual = ">=1"
 
 # PREVIEW: upcoming pydantic dataset-tools extensions (draft PRs #1579 + #1600 +
 # #1601, stacked on the `feat/mutable-steps-prototype` branch). Installed from git
