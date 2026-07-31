@@ -38,7 +38,7 @@
 1. You will be prompted to select an authentication system.
    Select **CILogon** and select your institution.
 1. After login you will be taken to the BinderHub dashboard.
-   You can provide any public repository of your own, but for the purposes of this event enter https://github.com/matthewfeickert/nrp-jupyterhub-debug into the "GitHub repository name or URL" field and click the "launch" button.
+   You can provide any public repository of your own, but for the purposes of this event enter https://github.com/matthewfeickert/nrp-jupyterhub-example into the "GitHub repository name or URL" field and click the "launch" button.
 1. After the Binder instance launches, visit your [Hub control panel](https://jupyterhub.ssl-hep.org/hub/home) and copy the **server name** for your Binder instance.
 
 ## Configure Claude Code harness
