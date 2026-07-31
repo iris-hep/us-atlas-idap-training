@@ -38,7 +38,7 @@
 1. You will be prompted to select an authentication system.
    Select **CILogon** and select your institution.
 1. After login you will be taken to the BinderHub dashboard.
-   You can provide any public repository of your own, but for the purposes of this event enter https://github.com/matthewfeickert/nrp-jupyterhub-debug into the "GitHub repository name or URL" field and click the "launch" button.
+   You can provide any public repository of your own, but for the purposes of this event enter https://github.com/matthewfeickert/nrp-jupyterhub-example into the "GitHub repository name or URL" field and click the "launch" button.
 1. After the Binder instance launches, visit your [Hub control panel](https://jupyterhub.ssl-hep.org/hub/home) and copy the **server name** for your Binder instance.
 
 ## Configure Claude Code harness
@@ -86,7 +86,7 @@ You can now prompt your model to interact with your Binder instance.
 
 ### Example prompt
 
-> Using MCP tools create a Jupyter notebook on the connected Jupyter Lab instance that gives examples of Awkward Array code.
+> Using MCP tools create a Python script on the connected Jupyter Lab instance that gives examples of Awkward Array code.
 
 Guidance for working with the remote Jupyter server over MCP lives in [`CLAUDE.md`](CLAUDE.md), which Claude Code loads automatically when launched from this directory.
 
