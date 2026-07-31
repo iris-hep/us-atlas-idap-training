@@ -25,7 +25,7 @@ claude mcp remove jupyter > /dev/null 2>&1
 claude mcp add -s local -t http jupyter "${JUPYTER_MCP_URL}"
 
 # Add IRIS-HEP marketplace
-claude plugin marketplace add -s local https://github.com/iris-hep/marketplace
+claude plugin marketplace add --scope local https://github.com/iris-hep/marketplace
 
 # Claude Code uses ANTHROPIC_AUTH_TOKEN when ANTHROPIC_API_KEY is absent.
 # Unsetting it ensures the NRP token is used correctly without triggering a
